@@ -16,5 +16,5 @@ class IdiomSpider(scrapy.Spider):
     def parse(self, response):
         for li in response.xpath('/html/body/div[2]/div[1]/div[2]/div[5]/ul/li'):
             idiom = IdiomItem()
-            idiom['idiom'] = li.xpath('a/text()').extract()
+            idiom['idiom'] = li.xpath('a/text()').extract_first()
             yield idiom
