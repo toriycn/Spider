@@ -15,8 +15,18 @@ class IdiomPipeline(object):
         self.cursor = self.db.cursor()
 
     def process_item(self, item, spider):
+        if self.selectbyname(item['idiom']) is 0:
+            self.insert(item)
+            return item
+
+    def insert(self, item):
         if isinstance(item, IdiomItem):
             sql = "INSERT INTO idiom (idiom) VALUES ('%s')" % (item['idiom'])
             self.cursor.execute(sql)
             self.db.commit()
-            return item
+
+    def selectbyname(self,name):
+        sql = "SELECT * FROM IDIOM WHERE idiom = '%s'" % (name)
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        return len(result)

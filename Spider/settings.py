@@ -65,6 +65,8 @@ RANDOMIZE_DOWNLOAD_DELAY = True
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddleware.useragent.UserAgentMiddleware': None,
     'Spider.middlewares.RandomUserAgentMiddleware': 400,
+    # 'scrapy.downloadermiddleware.useragent.HttpProxyMiddleware': None,
+    # 'Spider.middlewares.RandomIPMiddleware': 300,
 }
 
 # 自定义USER_AGENT列表，在DownloaderMiddleware随机获取
