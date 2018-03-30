@@ -6,7 +6,8 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from Spider.items import IdiomItem
 
-class DemospiderPipeline(object):
+class SpiderPipeline(object):
     def process_item(self, item, spider):
         if isinstance(item,IdiomItem):
-            print(item.idiom)
+            print("=======================================")
+            print(item['idiom'])
