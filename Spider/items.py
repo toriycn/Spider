@@ -7,7 +7,10 @@
 
 import scrapy
 
+class MeiZiTuItem(scrapy.Item):
+    imagetitle1 = scrapy.Field()
+    imagetitle2 = scrapy.Field()
+    imagename = scrapy.Field()
+    imageurl = scrapy.Field()
+    url = scrapy.Field()
 
-class IdiomItem(scrapy.Item):
-    # define the fields for your item here like:
-    idiom = scrapy.Field()

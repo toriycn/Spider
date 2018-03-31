@@ -15,25 +15,43 @@ NEWSPIDER_MODULE = 'Spider.spiders'
 # MySQL连接参数
 MYSQL_URL = 'localhost'
 MYSQL_USER_NAME = 'root'
-MYSQL_USER_PSD = 'root'
+MYSQL_USER_PSD = 'rootrootroot'
 MYSQL_DB_NAME = 'test'
 
 # 设置输出编码为utf-8
 FEED_EXPORT_ENCODING = 'utf-8'
 
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'DemoSpider (+http://www.yourdomain.com)'
+# 妹子图保存路径
+IMAGES_STORE = '/Users/zhangwenliang/Documents/meizitu'
+
+# 避免下载最近已下载的图片，单位/天
+# IMAGES_EXPIRES = 30
+
+# 开启下载中间件
+# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddleware.useragent.UserAgentMiddleware': None,
+    'Spider.middlewares.RandomUserAgentMiddleware': 400,
+    'scrapy.downloadermiddleware.useragent.HttpProxyMiddleware': None,
+    'Spider.middlewares.RandomIPMiddleware': 300,
+    'Spider.middlewares.DealReferer': 543,
+}
+
+# 开启pipelines
+# See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+ITEM_PIPELINES = {
+   'Spider.pipelines.MyImagePipeline': 300,
+}
 
 # 遵守 robots.txt 规则
 ROBOTSTXT_OBEY = False
 
 # 并发访问数(default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 32
 
 # 相同网站的爬取间隔/秒 (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
-# See also autothrottle settings and docs
-DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1
 # 设置爬取间隔为 0.5 * DOWNLOAD_DELAY ~ 1.5 * DOWNLOAD_DELAY
 RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
@@ -43,16 +61,10 @@ RANDOMIZE_DOWNLOAD_DELAY = True
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # 禁用 cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
-
-# Override the default request headers:
-#DEFAULT_REQUEST_HEADERS = {
-#   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-#   'Accept-Language': 'en',
-#}
 
 # 启用爬虫中间件
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
@@ -60,14 +72,16 @@ RANDOMIZE_DOWNLOAD_DELAY = True
 #    'DemoSpider.middlewares.DemospiderSpiderMiddleware': 543,
 #}
 
-# 开启下载中间件
-# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-    'scrapy.downloadermiddleware.useragent.UserAgentMiddleware': None,
-    'Spider.middlewares.RandomUserAgentMiddleware': 400,
-    # 'scrapy.downloadermiddleware.useragent.HttpProxyMiddleware': None,
-    # 'Spider.middlewares.RandomIPMiddleware': 300,
-}
+# Enable and configure HTTP caching (disabled by default)
+# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
+# 允许缓存
+# HTTPCACHE_ENABLED = True
+# # 缓存过期时间/秒,为0永不过期
+# HTTPCACHE_EXPIRATION_SECS = 0
+# # 缓存目录
+# HTTPCACHE_DIR = 'httpcache'
+# HTTPCACHE_IGNORE_HTTP_CODES = []
+# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # 自定义USER_AGENT列表，在DownloaderMiddleware随机获取
 MY_USER_AGENT = [
@@ -114,12 +128,6 @@ MY_USER_AGENT = [
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 #}
 
-# 开启pipelines
-# See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   'Spider.pipelines.IdiomPipeline': 300,
-}
-
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
@@ -132,14 +140,3 @@ ITEM_PIPELINES = {
 #AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 # Enable showing throttling stats for every response received:
 #AUTOTHROTTLE_DEBUG = False
-
-# Enable and configure HTTP caching (disabled by default)
-# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-# 允许缓存
-HTTPCACHE_ENABLED = True
-# 缓存过期时间/秒,为0永不过期
-HTTPCACHE_EXPIRATION_SECS = 0
-# 缓存目录
-HTTPCACHE_DIR = 'httpcache'
-HTTPCACHE_IGNORE_HTTP_CODES = []
-HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'

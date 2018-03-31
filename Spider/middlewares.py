@@ -53,7 +53,6 @@ class RandomIPMiddleware(HttpProxyMiddleware):
 
         param = {'type': '1', 'country': '国内','count': '10'}
         ipsinfojson = requests.get('http://localhost:8000', params=param)
-        print("发送请求")
         ipsinfo = json.loads(ipsinfojson.text)
         ips = []
         for ipinfo in ipsinfo:
@@ -67,3 +66,10 @@ class RandomIPMiddleware(HttpProxyMiddleware):
         if len(self.ips) is 0:
             self.ips = self.getips()
         return ip
+
+# 添加referer处理防盗链
+class DealReferer(object):
+    def process_request(self, request, spider):
+        referer = request.meta.get('referer', None)
+        if referer:
+            request.headers['referer'] = referer
