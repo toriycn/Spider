@@ -8,6 +8,8 @@
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware
 import random
+import requests
+import json
 
 # 产生随机USER_AGENT
 class RandomUserAgentMiddleware(UserAgentMiddleware):
@@ -30,8 +32,38 @@ class RandomUserAgentMiddleware(UserAgentMiddleware):
 class RandomIPMiddleware(HttpProxyMiddleware):
     def __init__(self, ip):
         self.ip = ip
+        self.ips = self.getips();
 
     def process_request(self, request, spider):
         # 调用接口获取ip
-        ip = ''
+        ip = self.getrandomip()
         request.meta["proxy"] = "http://" + ip
+
+    def getips(self):
+        #
+        # 接口参数如下
+        # types	int	0: 高匿,1:匿名,2 透明
+        # protocol	int	0: http, 1 https, 2 http/https
+        # count	int	数量
+        # country	str	取值为 国内, 国外
+        # area	str	地区
+        #
+        # param = {'type':'1','country':'国内','count':'5'}
+        # ips = requests.get('http://localhost:8000',params=param)
+
+        param = {'type': '1', 'country': '国内','count': '10'}
+        ipsinfojson = requests.get('http://localhost:8000', params=param)
+        print("发送请求")
+        ipsinfo = json.loads(ipsinfojson.text)
+        ips = []
+        for ipinfo in ipsinfo:
+            ip = '%s:%s' % (ipinfo[0], ipinfo[1])
+            ips.append(ip)
+        return ips
+
+    def getrandomip(self):
+        ip = random.choice(self.ips)
+        self.ips.remove(ip)
+        if len(self.ips) is 0:
+            self.ips = self.getips()
+        return ip
