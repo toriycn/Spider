@@ -24,9 +24,8 @@ class MeizituSpider(scrapy.Spider):
                 url = 'http://www.meizitu.com%s' % (url)
             else:
                 url = 'http://www.meizitu.com/a/%s' % (url)
-            yield Request(url,callback=self.parse_set)
+            yield Request(url, callback=self.parse)
 
-    def parse_set(self,response):
         title1 = response.xpath('//*[@id="maincontent"]/div[1]/div/h3/text()[2]').extract_first()
         for setli in response.xpath('//*[@id="maincontent"]/div[1]/ul/li'):
             seturl = setli.xpath('div/h3/a/@href').extract_first()
