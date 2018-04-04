@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-# Define here the models for your spider middleware
-#
-# See documentation in:
-# https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware
+from scrapy.http import HtmlResponse
+from selenium.common.exceptions import TimeoutException
 import random
 import requests
 import json
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from Spider import settings
 
 # 产生随机USER_AGENT
 class RandomUserAgentMiddleware(UserAgentMiddleware):
@@ -73,3 +73,22 @@ class DealReferer(object):
         referer = request.meta.get('referer', None)
         if referer:
             request.headers['referer'] = referer
+
+# 使用selenium渲染页面,并返回response对象
+class SeleniumMiddleware(object):
+    # 初始化selenium
+    def __init__(self):
+        options = Options()
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        self.browser = webdriver.Chrome(options=options)
+        self.browser.set_page_load_timeout(settings.TIME_OUT)
+        self.browser.set_script_timeout(settings.TIME_OUT)
+
+    def process_request(self, request):
+        try:
+            url = request.url
+            self.browser.get(url)
+            return HtmlResponse(url=request.url, body=self.browser.page_source, request=request, encoding='utf-8', status=200)
+        except TimeoutException:
+            return HtmlResponse(url=request.url, status=500, request=request)

@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for Spider project
-# You can find more settings consulting the documentation:
-#
-#     https://doc.scrapy.org/en/latest/topics/settings.html
-#     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-
 BOT_NAME = 'Spider'
 
 SPIDER_MODULES = ['Spider.spiders']
@@ -16,7 +9,7 @@ NEWSPIDER_MODULE = 'Spider.spiders'
 MYSQL_URL = 'localhost'
 MYSQL_USER_NAME = 'root'
 MYSQL_USER_PSD = 'rootrootroot'
-MYSQL_DB_NAME = 'test'
+MYSQL_DB_NAME = 'spider'
 
 # 设置输出编码为utf-8
 FEED_EXPORT_ENCODING = 'utf-8'
@@ -32,14 +25,18 @@ IMAGES_STORE = '/Users/zhangwenliang/Documents/meizitu'
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddleware.useragent.UserAgentMiddleware': None,
     'Spider.middlewares.RandomUserAgentMiddleware': 400,
-    'scrapy.downloadermiddleware.useragent.HttpProxyMiddleware': None,
-    'Spider.middlewares.RandomIPMiddleware': 300,
+    # 'scrapy.downloadermiddleware.useragent.HttpProxyMiddleware': None,
+    # 'Spider.middlewares.RandomIPMiddleware': 300,
+    # 'Spider.middlewares.SeleniumMiddleware': 500,
     'Spider.middlewares.DealReferer': 543,
 }
+
+TIME_OUT = 10
 
 # 开启pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
+   'Spider.pipelines.QQMusicItemPipeline': 200,
    'Spider.pipelines.MyImagePipeline': 300,
 }
 
@@ -51,7 +48,7 @@ CONCURRENT_REQUESTS = 32
 
 # 相同网站的爬取间隔/秒 (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 10
 # 设置爬取间隔为 0.5 * DOWNLOAD_DELAY ~ 1.5 * DOWNLOAD_DELAY
 RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
@@ -130,13 +127,13 @@ MY_USER_AGENT = [
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
-#AUTOTHROTTLE_ENABLED = True
+# AUTOTHROTTLE_ENABLED = True
 # The initial download delay
-#AUTOTHROTTLE_START_DELAY = 5
+# AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies
-#AUTOTHROTTLE_MAX_DELAY = 60
+# AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
-#AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
+# AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 # Enable showing throttling stats for every response received:
-#AUTOTHROTTLE_DEBUG = False
+# AUTOTHROTTLE_DEBUG = False
