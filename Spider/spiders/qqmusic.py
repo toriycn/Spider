@@ -10,7 +10,14 @@ from Spider.items import SongItem
 class QqmusicSpider(scrapy.Spider):
     # 歌手的mid，在qq音乐中打开歌手页面，连接中singer后面即为mid
     # 如https://y.qq.com/n/yqq/singer/004KKLWZ4320g1.html，id为004KKLWZ4320g1
-    singermids = ['004KKLWZ4320g1']
+
+    # 宋冬野，赵雷，陈粒，谢春花，好妹妹乐队，陈鸿宇，齐一，马頔，jam，陈小熊，徐海俏，尧十三，周云蓬，贰佰，花粥，万晓利
+    # 鹿先生乐队，纣王老胡，房东的猫，小闯，郝云，刘明汉，夏小虎
+    singermids = ['004KKLWZ4320g1', '001Lr98T0yEWAk', '004WgCsE3KBddt', '003hTTjo3JYqgM', '002Ua1Ph1SH8iF'
+                  , '001SXl8y2mQobu', '0020IaUo4Vgsjk', '001kwvXz1vTlaP', '0023ni2j3F9CpN', '003Z8WjM23prlT'
+                  , '003xkuV90Aswpy', '004WROsW0OjNeD', '0015E1aN3zm7tO', '003r4Mf04S5JMr', '00169imA4Iub3I'
+                  , '000d55760WnzUf', '004S3vUn27fDYv', '004asIE70OvN4z', '000PeZCQ1i4XVs', '000Qz0Ta1vyzNn'
+                  , '0044gacX2dLf6i', '000N6Y3P3KDGfE', '001TUnFo00FUzY']
     # 每次获取歌曲个数
     num = 30
 
