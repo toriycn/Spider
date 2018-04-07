@@ -25,8 +25,8 @@ IMAGES_STORE = '/Users/zhangwenliang/Documents/meizitu'
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddleware.useragent.UserAgentMiddleware': None,
     'Spider.middlewares.RandomUserAgentMiddleware': 400,
-    # 'scrapy.downloadermiddleware.useragent.HttpProxyMiddleware': None,
-    # 'Spider.middlewares.RandomIPMiddleware': 300,
+    'scrapy.downloadermiddleware.useragent.HttpProxyMiddleware': None,
+    'Spider.middlewares.RandomIPMiddleware': 300,
     # 'Spider.middlewares.SeleniumMiddleware': 500,
     'Spider.middlewares.DealReferer': 543,
 }
@@ -48,14 +48,14 @@ CONCURRENT_REQUESTS = 32
 
 # 相同网站的爬取间隔/秒 (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
-DOWNLOAD_DELAY = 10
+# DOWNLOAD_DELAY = 1
 # 设置爬取间隔为 0.5 * DOWNLOAD_DELAY ~ 1.5 * DOWNLOAD_DELAY
-RANDOMIZE_DOWNLOAD_DELAY = True
+# RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
 # 同一个域名并发访问数
-#CONCURRENT_REQUESTS_PER_DOMAIN = 16
+CONCURRENT_REQUESTS_PER_DOMAIN = 32
 # 同一个IP并发访问数
-#CONCURRENT_REQUESTS_PER_IP = 16
+CONCURRENT_REQUESTS_PER_IP = 32
 
 # 禁用 cookies (enabled by default)
 COOKIES_ENABLED = False
@@ -71,7 +71,7 @@ COOKIES_ENABLED = False
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-# 允许缓存
+# # 允许缓存
 # HTTPCACHE_ENABLED = True
 # # 缓存过期时间/秒,为0永不过期
 # HTTPCACHE_EXPIRATION_SECS = 0

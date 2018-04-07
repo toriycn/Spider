@@ -6,7 +6,9 @@ from scrapy.exceptions import DropItem
 import re
 import pymysql
 from Spider import settings
-from Spider.items import SongItem
+from Spider.items import LyricItem
+from Spider.items import CommentTotalItem
+from Spider.items import CommentItem
 from Spider.items import MeiZiTuItem
 
 class QQMusicItemPipeline(object):
@@ -16,22 +18,53 @@ class QQMusicItemPipeline(object):
         self.cursor = self.db.cursor()
 
     def process_item(self, item, spider):
-        if isinstance(item,SongItem):
+        if isinstance(item, LyricItem):
             # 查看数据库是否存在相同作者相同名称歌曲
-            if len(self.selectBySingerNameAndSongName(item)) is 0:
+            if len(self.selectLyricBySongId(item)) is 0:
                 # 为0不存在，添加到数据库
-                self.insert(item)
+                self.insertLyric(item)
+        elif isinstance(item, CommentTotalItem):
+            if len(self.selectCommentTotalBySongid(item)) is 0:
+                self.insertCommentTotal(item)
+        elif isinstance(item, CommentItem):
+            if len(self.selectCommentByCommentId(item)) is 0:
+                self.insertComment(item)
         else:
             return item
 
-    def insert(self, item):
-        sql = 'INSERT INTO QQMusic (singer, song, lyric) VALUES ("%s", "%s", "%s")' % \
-              (item['singer'], item['song'], item['lyric'])
+    def insertLyric(self, item):
+        sql = 'INSERT INTO QQMusicLyric (songid, singermid, singer, song, lyric) VALUES ("%s", "%s", "%s", "%s", "%s")' % \
+              (item['songid'], item['singermid'], item['singer'], item['song'], item['lyric'])
         self.cursor.execute(sql)
         self.db.commit()
 
-    def selectBySingerNameAndSongName(self, item):
-        sql = 'SELECT * FROM QQMusic WHERE singer = "%s" AND song = "%s"' % (item['singer'], item['song'])
+    def selectLyricBySongId(self, item):
+        sql = 'SELECT * FROM QQMusicLyric WHERE songid = "%s" ' % (item['songid'])
+        self.cursor.execute(sql)
+        results = self.cursor.fetchall()
+        return results
+
+    def insertCommentTotal(self, item):
+        sql = 'INSERT INTO QQMusicCommentTotal (songid, singermid, commentcount) VALUES ("%s", "%s", %s)' \
+              % (item['songid'], item['singermid'], item['commentcount'])
+        self.cursor.execute(sql)
+        self.db.commit()
+
+    def selectCommentTotalBySongid(self, item):
+        sql = 'SELECT * FROM QQMusicCommentTotal WHERE songid = "%s"' % (item['songid'])
+        self.cursor.execute(sql)
+        results = self.cursor.fetchall()
+        return results
+
+    def insertComment(self, item):
+        sql = 'INSERT INTO QQMusicCommentList (songid, singermid, commentid, content, userid, likecount, ishot) ' \
+              'VALUES ("%s","%s","%s","%s","%s","%s","%s")' % (item['songid'], item['singermid'], item['commentid']
+            , item['content'], item['userid'], item['likecount'], item['ishot'])
+        self.cursor.execute(sql)
+        self.db.commit()
+
+    def selectCommentByCommentId(self, item):
+        sql = 'SELECT * FROM QQMusicCommentList WHERE commentid = "%s"' % (item['commentid'])
         self.cursor.execute(sql)
         results = self.cursor.fetchall()
         return results
